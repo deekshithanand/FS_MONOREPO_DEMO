@@ -18,25 +18,25 @@ const UserSchema = new Schema<IUser>(
       type: String,
       required: true,
       minlength: 3,
-      maxlength: 10,
+      maxlength: 20,
     },
     lastName: {
       type: String,
       required: true,
       minlength: 3,
-      maxlength: 10,
+      maxlength: 20,
     },
     email: {
       type: String,
       required: true,
       minlength: 3,
-      maxlength: 10,
+      maxlength: 50,
     },
     password: {
       type: String,
       required: true,
       minlength: 3,
-      maxlength: 10,
+      maxlength: 500,
     },
     picturePath: {
       type: String,
@@ -52,4 +52,4 @@ const UserSchema = new Schema<IUser>(
   },
   { timestamps: true }
 );
-export default  model<IUser>("User", UserSchema);
+export default model<IUser>("User", UserSchema);

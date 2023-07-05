@@ -9,6 +9,7 @@ import multer from "multer";
 import path, { dirname } from "path";
 import { fileURLToPath } from "url";
 import { register, test } from "./controllers/auth.js";
+import authRouter from "./routes/authRoutes.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -27,12 +28,12 @@ app.use("/static", express.static(staticDir));
 
 /* FILE STORAGE CONFIGS */
 const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, staticDir); // Specify the destination folder where files should be stored
+  destination: (req, file, callBack) => {
+    callBack(null, staticDir); // Specify the destination folder where files should be stored
   },
-  filename: (req, file, cb) => {
+  filename: (req, file, callBack) => {
     const fileName = `${Date.now()}-${file.originalname}`; // Generate a unique filename
-    cb(null, fileName);
+    callBack(null, fileName);
   },
 });
 const upload = multer({ storage });
@@ -47,12 +48,15 @@ const mongoOptions: ConnectOptions = {
   user: process.env.MONGO_USER,
   pass: process.env.MONGO_PWD,
   dbName: process.env.MONGO_DATA_BASE,
-  connectTimeoutMS: 10000
+  connectTimeoutMS: 10000,
 };
 
 /* ROUTE CONFIGURATION */
-app.post("/auth", upload.single("picture"), register);
-app.get("/test",test) // Test route for experiments
+app.post("/auth/register", upload.single("picture"), register);
+// app.get("/test", test); // Test route for experiments
+app.use("/auth", authRouter);
+
+/* Register other Routes */
 
 startServer().catch((error) => console.log("Server startup failed: " + error));
 

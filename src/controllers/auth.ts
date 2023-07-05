@@ -12,8 +12,6 @@ async function register(req: Request, res: Response): Promise<Response> {
       picturePath,
       friends,
       location,
-      viewedProfile,
-      impressions,
     }: IUser = req.body;
 
     const salt = await bcrypt.genSalt();
@@ -27,11 +25,11 @@ async function register(req: Request, res: Response): Promise<Response> {
       picturePath,
       friends,
       location,
-      viewedProfile,
-      impressions,
+      viewedProfile: Math.floor(Math.random() * 1000),
+      impressions: Math.floor(Math.random() * 1000),
     });
 
-    newUser.save();
+    await newUser.save();
     return res.status(201).json(newUser);
   } catch (error) {
     console.log("Error during save user:" + error);
@@ -39,8 +37,8 @@ async function register(req: Request, res: Response): Promise<Response> {
   }
 }
 
-export async function test(req,res:Response) {
- res.send("Hello World");
+export async function test(req, res: Response) {
+  res.send("Hello World");
 }
 
 export { register };
