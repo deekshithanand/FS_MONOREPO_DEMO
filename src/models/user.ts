@@ -1,4 +1,4 @@
-import { Schema, model, Document } from "mongoose";
+import { Document, Schema, model } from "mongoose";
 
 export interface IUser extends Document {
   firstName: string;
@@ -42,13 +42,13 @@ const UserSchema = new Schema<IUser>(
       type: String,
       default: "",
     },
+    location: String,
+    viewedProfile: Number,
+    impressions: Number,
     friends: {
       type: [String],
       default: [],
     },
-    location: String,
-    viewedProfile: Number,
-    impressions: Number,
   },
   { timestamps: true }
 );

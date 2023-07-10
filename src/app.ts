@@ -8,8 +8,9 @@ import morgan from "morgan";
 import multer from "multer";
 import path, { dirname } from "path";
 import { fileURLToPath } from "url";
-import { register, test } from "./controllers/auth.js";
+import { register } from "./controllers/auth.js";
 import authRouter from "./routes/authRoutes.js";
+import userRouter from "./routes/userRoutes.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -55,6 +56,7 @@ const mongoOptions: ConnectOptions = {
 app.post("/auth/register", upload.single("picture"), register);
 // app.get("/test", test); // Test route for experiments
 app.use("/auth", authRouter);
+app.use("/users", userRouter);
 
 /* Register other Routes */
 
