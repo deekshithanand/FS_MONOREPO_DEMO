@@ -37,8 +37,4 @@ async function register(req: Request, res: Response): Promise<Response> {
   }
 }
 
-export async function test(req, res: Response) {
-  res.send("Hello World");
-}
-
 export { register };

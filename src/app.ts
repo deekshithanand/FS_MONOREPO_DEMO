@@ -1,64 +1,18 @@
-import bodyParser from "body-parser";
-import cors from "cors";
-import dotenv from "dotenv";
-import express from "express";
-import helmet from "helmet";
-import mongoose, { ConnectOptions } from "mongoose";
-import morgan from "morgan";
-import multer from "multer";
-import path, { dirname } from "path";
-import { fileURLToPath } from "url";
+import mongoose from "mongoose";
+import app from "./config/appConfig.js";
+import { PORT, mongoOptions, mongoURI } from "./config/mongoOptions.js";
+import upload from "./config/multer.js";
 import { register } from "./controllers/auth.js";
+import { verifyToken } from "./middleware/verifyToken.js";
 import authRouter from "./routes/authRoutes.js";
 import userRouter from "./routes/userRoutes.js";
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-const app: express.Application = express();
-/* APP MIDDLEWARE CONFIGS */
-app.use(morgan("dev"));
-app.use(helmet());
-app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(cors());
-
-const staticDir = path.join(__dirname, "public/static");
-app.use("/static", express.static(staticDir));
-
-/* FILE STORAGE CONFIGS */
-const storage = multer.diskStorage({
-  destination: (req, file, callBack) => {
-    callBack(null, staticDir); // Specify the destination folder where files should be stored
-  },
-  filename: (req, file, callBack) => {
-    const fileName = `${Date.now()}-${file.originalname}`; // Generate a unique filename
-    callBack(null, fileName);
-  },
-});
-const upload = multer({ storage });
-
-/* MONGOOSE CONFIGS */
-dotenv.config();
-const mongoURI = process.env.MONGODB_URI;
-const PORT = process.env.PORT;
-
-const mongoOptions: ConnectOptions = {
-  authSource: "admin",
-  user: process.env.MONGO_USER,
-  pass: process.env.MONGO_PWD,
-  dbName: process.env.MONGO_DATA_BASE,
-  connectTimeoutMS: 10000,
-};
+import postRouter from "./routes/PostRoutes.js";
 
 /* ROUTE CONFIGURATION */
 app.post("/auth/register", upload.single("picture"), register);
-// app.get("/test", test); // Test route for experiments
 app.use("/auth", authRouter);
-app.use("/users", userRouter);
-
-/* Register other Routes */
+app.use("/users", verifyToken, userRouter);
+app.use("/post", verifyToken, postRouter);
 
 startServer().catch((error) => console.log("Server startup failed: " + error));
 

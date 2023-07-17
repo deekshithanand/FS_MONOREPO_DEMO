@@ -5,7 +5,6 @@ import {
   patchFriends,
   removeFriends,
 } from "../controllers/users.js";
-// import login from "../controllers/login.js";
 
 const router = express.Router();
 

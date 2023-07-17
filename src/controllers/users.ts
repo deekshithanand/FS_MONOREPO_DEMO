@@ -35,7 +35,7 @@ export const patchFriends = async (req: Request, res: Response) => {
     const { id } = req.params;
     const friendId: string = req.query.friendId as string;
     if (!friendId) {
-      res.status(400).json({ error: "Invalid/empty friendID recieved" });
+      res.status(400).json({ error: "Invalid/empty friendID received" });
     }
     const [user, friendUser] = await Promise.all([
       User.findById(id),
