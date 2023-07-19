@@ -11,7 +11,8 @@
   "author": "DEEKSHITH",
   "license": "MIT",
   "workspaces": [
-    "packages/api"
+    "packages/api",
+    "packages/fe"
   ],
   "devDependencies": {
     "lerna": "^7.1.4",
