@@ -5,6 +5,10 @@ export function verifyToken(req: Request, res: Response, next: NextFunction) {
   if (!token) return res.status(401).json("Unauthorize user");
 
   try {
+    const tokenSecret = process.env.JWT_SECRET;
+    if (!tokenSecret) {
+      throw new Error("Token secret invalid");
+    }
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     req.user = decoded;
     next();
